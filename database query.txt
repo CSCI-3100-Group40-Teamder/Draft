@@ -1,0 +1,41 @@
+
+
+//Create connection to mysql database
+const connection = mysql.createConnection({
+    host:"database-testing.ccgcttjz3ptu.ap-southeast-1.rds.amazonaws.com",
+    port:'3306',
+    user:"admin",
+    password:"csci3100",
+    database: "user"
+}) 
+
+//create imgUploadTable
+const imgUploadTable = `CREATE TABLE IF NOT EXISTS imgUpload (
+    user_id  varchar(50),
+    filename varchar(100)
+    )`
+
+//drop imgUploadTable
+const dropTable = `DROP TABLE imgUpload`
+
+//connect to imgUploadTable
+connection.query(imgUploadTable, (error,result,fields) => {
+    if(error) throw error
+    console.log("create database")
+});
+
+//insert name of file for a user
+var user_id = 1;
+var info = [[user_id,req.file.filename]];
+var sql = 'INSERT INTO imgUpload (user_id,filename) VALUES ?';
+connection.query(sql, [info], function (err, result) {
+    if (err) throw err
+});
+
+// Get all photo upload by a user
+var user_id = 0;
+var sql = 'SELECT filename FROM imgUpload WHERE user_id = ?';
+connection.query(sql, [user_id], function (err, result) {
+    if (err) throw err
+    console.log(result);
+});
