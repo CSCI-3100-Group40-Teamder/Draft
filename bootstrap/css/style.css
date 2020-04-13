@@ -1,0 +1,89 @@
+h1,h2,h3,h4,h5,h6{
+    font-family: 'Metal Mania', cursive;
+}
+
+p,a,input,label,textarea,span,ul,iu{
+    font-family: 'Open Sans', sans-serif;
+}
+
+#intro .btn{
+    background: #f05f5c;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+#group-header .container{
+    height: 30px;
+}
+
+#group-header .dropdown{
+    margin: auto;
+    width: 20%;
+    position: relative;
+
+}
+#group-header .dropdown-menu{
+    display: none;
+}
+
+#group-header .dropdown:hover .dropdown-menu{
+    display: block;
+}
+#group-header .btn{
+    color: blue;
+    background: white;
+}
+
+
+#intro .jumbotron{
+    height:70vh;
+}
+
+#intro h1{
+    font-size: 40px;
+    font-weight:900;
+    line-height: 1.5;
+}
+
+#intro .container{
+    position: relative;
+    top: 50%; 
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+#post .card{
+    position: relative;
+    width: 18rem;
+}
+
+#post .card-deck {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-gap: 10px;
+}
+
+#myCarousel{
+    margin: auto;
+    width: 1200px;
+    height: 500px;
+    padding: 10px;
+    margin-bottom:10px;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    #post .card-deck { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 768px) {
+    #post .card-deck { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1280px) {
+    #post .card-deck { grid-template-columns: repeat(4, 1fr); }
+}
+
