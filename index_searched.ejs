@@ -5,22 +5,14 @@
 	}
 </style>
 	<body style='background-color: rgb(235,235,235)'>
-		<h1>user id: <%= user_id %></h1>
+		<h1>host id: <%= user %></h1>
 		<% group_result.forEach(function(item){%>
 			<table>
-					<th>
-						<form action="/filter_group" method="GET">
-								<input type="hidden" name="group_id" value="<%= item.group_id %>"/><br>
-								<button><%=item.group_name %></button>
-						</form>
-					</th>
-					<th>
-						<%= item.group_descripton %>
-					</th>
+					<th><%=item.group_name %></th>
 			</table>
 		<% }); %>
-		<form action="/search_id_of_post" method="GET">
-			<label for="Search ID">Search id:</label><br>
+		<form action="/search_post_id" method="GET">
+			<label for="Search ID">Search:</label><br>
 			<input type="text" name="search_post_id"/><br>
 			<button>Search</button>
 		</form>
@@ -29,19 +21,20 @@
 			<input type="text" name="search_post_name"/><br>
 			<button>Search</button>
 		</form>
-		<% if(user_id[0]=='a'){ %>
-    		<a href="/admin">administrator</a><br>
-    	<% } %>
 		<a href="/creating_post">Create a new post</a><br>
 		<a href="/show_your_room">your room</a><br>
-		<a href="/show_your_user_information?user_id=<%= user_id %>">your user information</a><br>
-		<a href="/filter_not_joined">show the room that is not joined by you.</a><br>
-		<a href="/indexuser_account">all user account</a><br>
-		This will show a list of pur posts
+		<a href="/show_your_user_information">your user information</a><br>
+		This will show a list of pur posts after searched
 		<% result.forEach(function(item){%>
 			<table>
 					<tr>
 	    				<th><%= item.post_id %></th>
+	    				<th>
+	    					<form action="/join_post" method="GET">
+							    <input type="hidden" name="join_post_id" value="<%= item.post_id %>"/><br>
+								<button>Join</button>
+							</form>
+	    				</th>
 	 			</tr>
 	  			<tr>
 	    				<th><%= item.title %></th>
@@ -57,11 +50,10 @@
 	  			</tr>
 			</table>
 		<% }); %>	
+		<a href="/indexuser_account">user account</a><br>
+		<a href="/show_your_room">your room</a>
 		<form action="/back" method="GET">
 			<br><button name="post_id">Back</button> 
-		</form>
-		<form action="/" method="GET">
-			<br><button name="post_id">Back to who</button> 
 		</form>
 	</body>
 </html>
