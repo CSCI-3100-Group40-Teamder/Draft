@@ -7,15 +7,12 @@ const port = process.env.PORT || 3000;
 var url = require('url');
 app.set('view engine', 'ejs');
 
- 
-// 加入線上人數計數
-let onlineCount = 0;
+let numOfOnline = 0;
 var chatroomID = 0;
 var ID = 0;
 
+
 app.get('/' ,function(req,res){
-    //res.send('this is my homepage');
-    
     res.render('teach');
 });
 
@@ -25,22 +22,18 @@ app.get('/selectchat', function (req, res) {
     var qdata = q.query;
     chatroomID = qdata.chatroom
     records.setData(chatroomID)
-    res.render('index',{chatroom : qdata.chatroom});
+    res.render('chatroom',{chatroom : qdata.chatroom}); // chatroom 應該係 ＝＝ post id 
+    //res.render('chatroom',{chatroom : qdata.chatroom}); 
 });
  
 
-// 當有新connection 所發生嘅野
+//----------------------------------------------------------------------when there is a new connection--------------------------------------------------------------
 io.on('connection', (socket) => {
-    // 有連線發生時增加人數
-    onlineCount++;
-    // 發送人數給網頁
-    io.emit("online", onlineCount);
-
-
-    // 發送紀錄最大值
-    //socket.emit("maxRecord", records.getMax());
     
-    // 發送紀錄
+    numOfOnline++;
+    // 發送人數給網頁
+    io.emit("online", numOfOnline);
+
     // 當有new connection la, send 返 完整嘅 chat record 比 new client 
     
     records.getData((msgs) => {
@@ -49,44 +42,44 @@ io.on('connection', (socket) => {
     });
  
     socket.on("greet", () => {
-        socket.emit("greet", onlineCount);
+        socket.emit("greet", numOfOnline);
     });
  
     socket.on("send", (msg) => {
         records.setData(chatroomID)
         ID = msg.roomID
-        // 因此我們直接 return ，終止函式執行。
-        // to rev the mag
-        // console.log(mag) // it will show the msg in the terminal
-        if (Object.keys(msg).length < 2) return; // if rev's msg < 2 ==> error happened
         records.insertData(msg);
         
     });
  
     socket.on('disconnect', () => {
-        // 有人離線了，扣人
-        if (onlineCount > 0){
-            onlineCount = onlineCount - 1;
+        // when someone disconnect the server
+        if (numOfOnline > 0){
+            numOfOnline = numOfOnline - 1;
         }else{
-            onlineCount = 0 ;
+            numOfOnline = 0 ;
         }
-        io.emit("online", onlineCount); 
+        io.emit("online", numOfOnline); 
     });
 });
- 
+
+
+//-------------------------------------------------when there are new message, then send to different clients-----------------------------------------------------
 records.on("new_message", (msg) => {
     // for sending new msg to client 
     // no new connection here
     records.setData(chatroomID)
-    console.log("Yes You got the msg\n");
-    console.log(ID + "Test " + msg.roomID)
-    
+    //console.log("Yes You got the msg\n");
+    //console.log(ID + "Test " + msg.roomID)
+    // msg.roomID == which room does the msg belongs to
     io.emit("msg", msg)
-    
     
 });
  
+
+//----------------------------------------------------for starting the server---------------------------------------------------------------------------------
+
 server.listen(port, () => {
-    console.log("Server Started. http://localhost:" + port);
+    console.log("Server Start");
 });
 
